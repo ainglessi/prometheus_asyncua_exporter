@@ -1,0 +1,18 @@
+exporter:
+  port: 9840
+servers:
+  - url: opc.tcp://opcua.example.com:4840
+    refresh_time: 15
+    nodes:
+      - node_path: ns=3;i=1024
+        metric_name: sample_metric_one
+        description: First sample metric
+      - node_path: ns=5;i=2048
+        metric_name: sample_metric_two
+        description: Second sample metric
+  - url: opc.tcp://localhost:4840
+    refresh_time: 30
+    nodes:
+      - node_path: ns=7;i=4096
+        metric_name: sample_metric_three
+        description: Third sample metric

@@ -1,0 +1,88 @@
+# SPDX-License-Identifier: Apache-2.0
+
+# Copyright 2022 Sebastian Heppner, RWTH Aachen
+# Copyright 2024 Alexander Inglessi, VDW e.V.
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+# http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import sys
+import yaml
+from typing import List
+import dataclasses
+import asyncio
+from asyncua import Client
+import prometheus_client
+import socket
+
+@dataclasses.dataclass
+class OPCUAGauge:
+    metric_name: str
+    node_path: str
+    description: str
+    gauge: prometheus_client.Gauge
+
+# Read configuration and nodes from YAML file.
+def read_yaml_config(filename: str) -> tuple:
+    with open(filename, "r") as yaml_file:
+        config = yaml.safe_load(yaml_file)
+    exporter_port = config["exporter"].get("port", 9840)  # Read exporter port, default to 9840.
+    servers_config = config["servers"]  # Read OPC UA servers and their nodes to be monitored.
+    return exporter_port, servers_config
+
+async def query_server(url: str, nodes: List[dict], refresh_time: int):
+    while True:
+        try:
+            async with Client(url=url) as opcua_client:
+                for node in nodes:
+                    try:
+                        var = opcua_client.get_node(node["node_path"])
+                        value = await var.read_value()
+                        print(f"Value of node [{var}]: {value}")
+                        # Set the value to Prometheus gauge with label "server" set to server URL.
+                        node["gauge"].labels(server=url).set(value)
+                    except Exception as e:
+                        print(f"Error getting node value of {node['node_path']}: {e}")
+                        # Set metric value to NaN when node not found or other errors occur.
+                        node["gauge"].labels(server=url).set(float('NaN'))
+        except socket.gaierror as e:
+            print(f"Error resolving hostname for OPC UA server {url}: {e}")
+            # Set metric value to NaN when hostname resolution fails.
+            for node in nodes:
+                node["gauge"].labels(server=url).set(float('NaN'))
+        except Exception as e:
+            print(f"Connection to OPC UA server {url} failed: {e}")
+            # Set metric value to NaN when connection fails.
+            for node in nodes:
+                node["gauge"].labels(server=url).set(float('NaN'))
+        await asyncio.sleep(refresh_time)
+
+async def main():
+    config_file = sys.argv[1] if len(sys.argv) > 1 else "config.yaml"
+    exporter_port, servers_config = read_yaml_config(config_file)
+    prometheus_client.start_http_server(exporter_port)  # Start exporter.
+    tasks = []
+    # Cycle through OPC UA servers and nodes specified in config file.
+    for server in servers_config:
+        url = server["url"]
+        refresh_time = server.get("refresh_time", 10)
+        nodes = server.get("nodes", [])
+        for node in nodes:
+            metric_name = node["metric_name"]
+            description = node.get("description", "")
+            gauge = prometheus_client.Gauge(metric_name, description, labelnames=["server"])
+            node["gauge"] = gauge
+            tasks.append(asyncio.create_task(query_server(url, nodes, refresh_time)))
+    await asyncio.gather(*tasks)
+
+if __name__ == "__main__":
+    asyncio.run(main())

@@ -1,0 +1,4 @@
+prometheus-client>=0.20.0
+asyncua>=1.1.0
+cryptography>=42.0.5
+pyyaml>=5.3.1
