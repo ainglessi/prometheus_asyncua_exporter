@@ -21,7 +21,7 @@ Adjust [config.yaml](config.yaml) to your needs and run the exporter with
 
 `python3 exporter.py`
 
-Prometheus metrics will then be available at http://localhost:9840/.
+Prometheus metrics will then be available at <http://localhost:9840/>.
 
 ### Run in container
 
@@ -32,6 +32,12 @@ Build Docker image:
 Edit `config.yaml` and start the container:
 
 `docker run -v ./config.yaml:/app/config.yaml -p 9101:9840 prometheus_asyncua_exporter`
+
+Or pull the pre-built package:
+
+`docker run -v ./config.yaml:/app/config.yaml -p 9101:9840 ghcr.io/ainglessi/prometheus_asyncua_exporter`
+
+Prometheus metrics will then be available at <http://localhost:9101/>.
 
 ## License
 
