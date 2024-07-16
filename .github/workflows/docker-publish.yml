@@ -84,7 +84,7 @@ jobs:
           outputs: |
             type=image,
             name=target,
-            annotation-index.org.opencontainers.image.description=OPC UA exporter for Prometheus,
+            annotation-index.org.opencontainers.image.description="OPC UA exporter for Prometheus",
             annotation-index.org.opencontainers.image.source=https://github.com/${{ github.repository }},
             annotation-index.org.opencontainers.image.licenses=Apache-2.0
 
