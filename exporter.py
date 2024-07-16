@@ -17,7 +17,7 @@
 
 import sys
 import yaml
-from typing import List
+from typing import List, Optional
 import dataclasses
 import asyncio
 from asyncua import Client
@@ -39,10 +39,14 @@ def read_yaml_config(filename: str) -> tuple:
     servers_config = config["servers"]  # Read OPC UA servers and their nodes to be monitored.
     return exporter_port, servers_config
 
-async def query_server(url: str, nodes: List[dict], refresh_time: int):
+async def query_server(url: str, username: Optional[str], password: Optional[str], nodes: List[dict], refresh_time: int):
     while True:
         try:
             async with Client(url=url) as opcua_client:
+                # Set the username and password for authentication if provided.
+                if username and password:
+                    opcua_client.set_user(username)
+                    opcua_client.set_password(password)
                 for node in nodes:
                     try:
                         var = opcua_client.get_node(node["node_path"])
@@ -74,6 +78,8 @@ async def main():
     # Cycle through OPC UA servers and nodes specified in config file.
     for server in servers_config:
         url = server["url"]
+        username = server.get("username")
+        password = server.get("password")
         refresh_time = server.get("refresh_time", 10)
         nodes = server.get("nodes", [])
         for node in nodes:
@@ -81,7 +87,7 @@ async def main():
             description = node.get("description", "")
             gauge = prometheus_client.Gauge(metric_name, description, labelnames=["server"])
             node["gauge"] = gauge
-            tasks.append(asyncio.create_task(query_server(url, nodes, refresh_time)))
+        tasks.append(asyncio.create_task(query_server(url, username, password, nodes, refresh_time)))
     await asyncio.gather(*tasks)
 
 if __name__ == "__main__":
