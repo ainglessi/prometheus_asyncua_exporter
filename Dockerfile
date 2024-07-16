@@ -1,11 +1,6 @@
 # Use official Python image from Docker Hub.
 FROM python:3.12-slim
 
-# Image description.
-LABEL org.opencontainers.image.source=https://github.com/ainglessi/prometheus_asyncua_exporter
-LABEL org.opencontainers.image.description="OPC UA exporter for Prometheus"
-LABEL org.opencontainers.image.licenses=Apache-2.0
-
 # Set working directory in the container.
 WORKDIR /app
 
