@@ -37,7 +37,9 @@ def read_yaml_config(filename: str) -> tuple:
         config = yaml.safe_load(yaml_file)
     exporter_port = config["exporter"].get("port", 9840)  # Read exporter port, default to 9840.
     servers_config = config["servers"]  # Read OPC UA servers and their nodes to be monitored.
-    return exporter_port, servers_config
+    tls_certfile = config["exporter"].get("tls_certfile")  # Optional: TLS certificate file path.
+    tls_keyfile = config["exporter"].get("tls_keyfile")  # Optional: TLS key file path.
+    return exporter_port, servers_config, tls_certfile, tls_keyfile
 
 async def query_server(url: str, username: Optional[str], password: Optional[str], nodes: List[dict], refresh_time: int):
     while True:
@@ -72,8 +74,14 @@ async def query_server(url: str, username: Optional[str], password: Optional[str
 
 async def main():
     config_file = sys.argv[1] if len(sys.argv) > 1 else "config.yaml"
-    exporter_port, servers_config = read_yaml_config(config_file)
-    prometheus_client.start_http_server(exporter_port)  # Start exporter.
+    exporter_port, servers_config, tls_certfile, tls_keyfile = read_yaml_config(config_file)
+    # Start the Prometheus exporter with HTTP or HTTPS.
+    if tls_certfile and tls_keyfile:
+        print(f"Starting HTTPS server on port {exporter_port}")
+        prometheus_client.start_http_server(exporter_port, certfile=tls_certfile, keyfile=tls_keyfile)
+    else:
+        print(f"Starting HTTP server on port {exporter_port}")
+        prometheus_client.start_http_server(exporter_port)
     tasks = []
     # Cycle through OPC UA servers and nodes specified in config file.
     for server in servers_config:

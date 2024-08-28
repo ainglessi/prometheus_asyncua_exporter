@@ -1,5 +1,7 @@
 exporter:
   port: 9840
+  # tls_certfile: "/path/to/your/certfile.pem"  # Uncomment for TLS support.
+  # tls_keyfile: "/path/to/your/keyfile.pem"  # Uncomment for TLS support.
 servers:
   - url: opc.tcp://opcua.example.com:4840
     # username: "your-username"  # Uncomment if authentication is needed.
