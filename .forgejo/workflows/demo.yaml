@@ -3,4 +3,8 @@ jobs:
   test:
     runs-on: docker
     steps:
-      - run: echo All Good
+      - run: echo All good on docker/podman
+  ubuntutest:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo All good on ubuntu-latest
