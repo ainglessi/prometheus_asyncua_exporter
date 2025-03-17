@@ -23,6 +23,7 @@ import asyncio
 from asyncua import Client
 import prometheus_client
 import socket
+import logging
 
 @dataclasses.dataclass
 class OPCUAGauge:
@@ -41,6 +42,19 @@ def read_yaml_config(filename: str) -> tuple:
     tls_keyfile = config["exporter"].get("tls_keyfile")  # Optional: TLS key file path.
     return exporter_port, servers_config, tls_certfile, tls_keyfile
 
+# Configure logging
+def configure_logging(filename: str):
+    with open(filename, "r") as yaml_file:
+        config = yaml.safe_load(yaml_file)
+    log_level = config["exporter"].get("log_level", "INFO").upper()
+    logging.basicConfig(
+        level=getattr(logging, log_level, logging.INFO),
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+
 async def query_server(url: str, username: Optional[str], password: Optional[str], nodes: List[dict], refresh_time: int):
     while True:
         try:
@@ -53,20 +67,20 @@ async def query_server(url: str, username: Optional[str], password: Optional[str
                     try:
                         var = opcua_client.get_node(node["node_path"])
                         value = await var.read_value()
-                        print(f"Value of node [{var}]: {value}")
+                        logging.info(f"Value of node [{var}]: {value}")
                         # Set the value to Prometheus gauge with label "server" set to server URL.
                         node["gauge"].labels(server=url).set(value)
                     except Exception as e:
-                        print(f"Error getting node value of {node['node_path']}: {e}")
+                        logging.error(f"Error getting node value of {node['node_path']}: {e}")
                         # Set metric value to NaN when node not found or other errors occur.
                         node["gauge"].labels(server=url).set(float('NaN'))
         except socket.gaierror as e:
-            print(f"Error resolving hostname for OPC UA server {url}: {e}")
+            logging.error(f"Error resolving hostname for OPC UA server {url}: {e}")
             # Set metric value to NaN when hostname resolution fails.
             for node in nodes:
                 node["gauge"].labels(server=url).set(float('NaN'))
         except Exception as e:
-            print(f"Connection to OPC UA server {url} failed: {e}")
+            logging.error(f"Connection to OPC UA server {url} failed: {e}")
             # Set metric value to NaN when connection fails.
             for node in nodes:
                 node["gauge"].labels(server=url).set(float('NaN'))
@@ -75,12 +89,13 @@ async def query_server(url: str, username: Optional[str], password: Optional[str
 async def main():
     config_file = sys.argv[1] if len(sys.argv) > 1 else "config.yaml"
     exporter_port, servers_config, tls_certfile, tls_keyfile = read_yaml_config(config_file)
+    configure_logging(config_file)
     # Start the Prometheus exporter with HTTP or HTTPS.
     if tls_certfile and tls_keyfile:
-        print(f"Starting HTTPS server on port {exporter_port}")
+        logging.info(f"Starting HTTPS server on port {exporter_port}")
         prometheus_client.start_http_server(exporter_port, certfile=tls_certfile, keyfile=tls_keyfile)
     else:
-        print(f"Starting HTTP server on port {exporter_port}")
+        logging.info(f"Starting HTTP server on port {exporter_port}")
         prometheus_client.start_http_server(exporter_port)
     tasks = []
     # Cycle through OPC UA servers and nodes specified in config file.

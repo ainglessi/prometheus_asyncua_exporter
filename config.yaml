@@ -2,11 +2,12 @@ exporter:
   port: 9840
   # tls_certfile: "/path/to/your/certfile.pem"  # Uncomment for TLS support.
   # tls_keyfile: "/path/to/your/keyfile.pem"  # Uncomment for TLS support.
+  log_level: INFO  # Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL
 servers:
   - url: opc.tcp://opcua.example.com:4840
     # username: "your-username"  # Uncomment if authentication is needed.
     # password: "your-password"  # Uncomment if authentication is needed.
-    refresh_time: 15
+    refresh_time: 15  # Interval in seconds.
     nodes:
       - node_path: ns=3;i=1024
         metric_name: sample_metric_one
