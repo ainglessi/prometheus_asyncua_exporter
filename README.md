@@ -5,7 +5,9 @@ OPC UA exporter for Prometheus written in Python using [opcua-asyncio](https://g
 ## Features
 
 * Can read values of multiple nodes from multiple OPC UA servers.
+  * Supports username+password authentication.
 * Publishes values as Prometheus metrics (gauge type).
+  * Optional TLS support.
 * Returns NaN in case of errors.
 * Can be run as a container.
 
@@ -15,7 +17,11 @@ OPC UA exporter for Prometheus written in Python using [opcua-asyncio](https://g
 
 Clone this repository and install required libraries:
 
-`pip3 install -r requirements.txt`
+`python3 -m venv venv`
+
+`source venv/bin/activate`
+
+`pip install -r requirements.txt`
 
 Adjust [config.yaml](config.yaml) to your needs and run the exporter with
 
@@ -25,7 +31,7 @@ Prometheus metrics will then be available at <http://localhost:9840/>.
 
 ### Run in container
 
-Build Docker image:
+Build container image:
 
 `docker build -t prometheus_asyncua_exporter .`
 
