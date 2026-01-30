@@ -2,6 +2,8 @@ on: [push]
 jobs:
   build-and-publish:
     runs-on: docker
+    container:
+      image: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
