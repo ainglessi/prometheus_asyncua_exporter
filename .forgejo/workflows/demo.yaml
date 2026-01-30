@@ -1,10 +1,18 @@
 on: [push]
 jobs:
-  test:
-    runs-on: docker
+  build-and-publish:
+    runs-on: codeberg-small-lazy
+    container:
+      image: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
-      - run: echo All good on docker/podman
-  ubuntutest:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo All good on ubuntu-latest
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Login to Codeberg Registry
+        run: |
+          echo "${{ secrets.registry_token }}" | docker login codeberg.org -u ${{ env.FORGEJO_ACTOR }} --password-stdin
+      - name: Build and Push
+        run: |
+          IMAGE_NAME=$(echo "codeberg.org/${{ env.FORGEJO_REPOSITORY }}" | tr '[:upper:]' '[:lower:]')
+          docker build -t "$IMAGE_NAME:latest" -t "$IMAGE_NAME:${{ env.FORGEJO_SHA }}" .
+          docker push "$IMAGE_NAME:${{ env.FORGEJO_SHA }}"
+          docker push "$IMAGE_NAME:latest"
