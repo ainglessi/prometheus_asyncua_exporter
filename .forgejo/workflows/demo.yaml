@@ -7,10 +7,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Login to Codeberg Registry
         run: |
-          echo "${{ secrets.registry_token }}" | docker login codeberg.org -u ${{ env.FORGEJO_ACTOR }} --password-stdin
+          echo "${{ secrets.registry_token }}" | podman login codeberg.org -u ${{ env.FORGEJO_ACTOR }} --password-stdin
       - name: Build and Push
         run: |
           IMAGE_NAME=$(echo "codeberg.org/${{ env.FORGEJO_REPOSITORY }}" | tr '[:upper:]' '[:lower:]')
-          docker build -t "$IMAGE_NAME:latest" -t "$IMAGE_NAME:${{ env.FORGEJO_SHA }}" .
-          docker push "$IMAGE_NAME:${{ env.FORGEJO_SHA }}"
-          docker push "$IMAGE_NAME:latest"
+          podman build -t "$IMAGE_NAME:latest" -t "$IMAGE_NAME:${{ env.FORGEJO_SHA }}" .
+          podman push "$IMAGE_NAME:${{ env.FORGEJO_SHA }}"
+          podman push "$IMAGE_NAME:latest"
