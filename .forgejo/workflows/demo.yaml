@@ -21,8 +21,9 @@ jobs:
         with:
           images: "codeberg.org/${{ env.FORGEJO_REPOSITORY }}"
           flavor: |
-            latest=false
-          tags: "type=sha"
+            latest=true
+          tags: |
+            type=sha
       - name: Build and push
         uses: docker/build-push-action@v6.18.0
         with:
