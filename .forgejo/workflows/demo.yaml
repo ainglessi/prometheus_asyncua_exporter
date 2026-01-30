@@ -2,8 +2,6 @@ on: [push]
 jobs:
   build-and-publish:
     runs-on: codeberg-small-lazy
-    container:
-      image: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
