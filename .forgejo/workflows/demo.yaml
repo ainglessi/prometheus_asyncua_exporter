@@ -1,7 +1,7 @@
 on: [push]
 jobs:
   build-and-publish:
-    runs-on: codeberg-small-lazy
+    runs-on: docker
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
