@@ -6,6 +6,7 @@ jobs:
       image: ghcr.io/super-linter/super-linter:latest
     env:
       RUN_LOCAL: true
+      DEFAULT_BRANCH: main
     steps:
       - name: Checkout code
         uses: actions/checkout@v6.0.1
