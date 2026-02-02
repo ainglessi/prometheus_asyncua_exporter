@@ -12,7 +12,7 @@ jobs:
   build-and-publish:
     runs-on: docker
     container:
-      image: ghcr.io/catthehacker/ubuntu:act-latest
+      image: docker:cli
     steps:
       - name: Checkout code
         uses: actions/checkout@v6.0.1
