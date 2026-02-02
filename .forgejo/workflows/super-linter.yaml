@@ -4,6 +4,8 @@ jobs:
     runs-on: docker
     container:
       image: ghcr.io/super-linter/super-linter:latest
+    env:
+      RUN_LOCAL: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v6.0.1
