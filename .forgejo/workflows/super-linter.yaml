@@ -6,6 +6,6 @@ jobs:
       image: ghcr.io/super-linter/super-linter:latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
       - name: Run Super-Linter
         run: /action/lib/linter.sh
