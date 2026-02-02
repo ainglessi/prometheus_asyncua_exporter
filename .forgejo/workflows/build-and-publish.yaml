@@ -2,6 +2,12 @@ on:
   push:
     tags:
       - "*"
+    workflow_dispatch:
+      inputs:
+        reason:
+          description: "Reason for manual build"
+          required: false
+          default: "Manual testing"
 jobs:
   build-and-publish:
     runs-on: docker
