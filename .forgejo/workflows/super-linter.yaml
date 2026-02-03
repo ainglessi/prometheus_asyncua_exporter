@@ -7,31 +7,12 @@ jobs:
     env:
       RUN_LOCAL: true
       DEFAULT_BRANCH: main
-      VALIDATE_ALL_CODEBASE: true
-      VALIDATE_CHECKOV: false
-      VALIDATE_CSS: false
-      VALIDATE_CSS_PRETTIER: false
-      VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
-      VALIDATE_GRAPHQL_PRETTIER: false
-      VALIDATE_HTML_PRETTIER: false
-      VALIDATE_JAVASCRIPT_ES: false
-      VALIDATE_JAVASCRIPT_PRETTIER: false
-      VALIDATE_JSON: false
-      VALIDATE_JSON_PRETTIER: false
-      VALIDATE_JSONC: false
-      VALIDATE_JSONC_PRETTIER: false
-      VALIDATE_JSX: false
-      VALIDATE_JSX_PRETTIER: false
-      VALIDATE_MARKDOWN_PRETTIER: false
-      VALIDATE_SPELL_CODESPELL: false
-      VALIDATE_TRIVY: false
-      VALIDATE_TSX: false
-      VALIDATE_TYPESCRIPT_ES: false
-      VALIDATE_TYPESCRIPT_PRETTIER: false
-      VALIDATE_VUE: false
-      VALIDATE_VUE_PRETTIER: false
-      VALIDATE_YAML_PRETTIER: false
-      VALIDATE_GIT_COMMITLINT: false
+      VALIDATE_ALL_CODEBASE: false
+      VALIDATE_PYTHON_RUFF: true
+      VALIDATE_PYTHON_RUFF_FORMAT: true
+      VALIDATE_YAML_PRETTIER: true
+      VALIDATE_DOCKERFILE_HADOLINT: true
+      VALIDATE_MARKDOWN: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v6.0.1
