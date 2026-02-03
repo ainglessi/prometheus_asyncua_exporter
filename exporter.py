@@ -15,15 +15,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
-import yaml
-from typing import List, Optional
-import dataclasses
 import asyncio
-from asyncua import Client
-import prometheus_client
-import socket
+import dataclasses
 import logging
+import socket
+import sys
+from typing import List, Optional
+
+import prometheus_client
+import yaml
+from asyncua import Client
 
 
 @dataclasses.dataclass
