@@ -7,12 +7,13 @@ jobs:
     env:
       RUN_LOCAL: true
       DEFAULT_BRANCH: main
-      VALIDATE_ALL_CODEBASE: false
+      VALIDATE_ALL_CODEBASE: true
       VALIDATE_PYTHON_RUFF: true
       VALIDATE_PYTHON_RUFF_FORMAT: true
       VALIDATE_YAML_PRETTIER: true
       VALIDATE_DOCKERFILE_HADOLINT: true
       VALIDATE_MARKDOWN: true
+      VALIDATE_SHELL_SHFMT: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v6.0.1
