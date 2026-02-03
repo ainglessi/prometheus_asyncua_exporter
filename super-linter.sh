@@ -10,7 +10,7 @@ docker pull ghcr.io/super-linter/super-linter:latest
 docker run \
 	-e IGNORE_GITIGNORED_FILES=true \
 	-e LOG_LEVEL=INFO \
-	-e DEFAULT_BRANCH=main \
+	-e DEFAULT_BRANCH=origin/main \
 	-e RUN_LOCAL=true \
 	-e VALIDATE_ALL_CODEBASE=true \
 	-e VALIDATE_PYTHON_RUFF=true \
