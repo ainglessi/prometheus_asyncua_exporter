@@ -4,12 +4,12 @@ OPC UA exporter for Prometheus written in Python using [opcua-asyncio](https://g
 
 ## Features
 
-* Can read values of multiple nodes from multiple OPC UA servers.
-  * Supports username+password authentication.
-* Publishes values as Prometheus metrics (gauge type).
-  * Optional TLS support.
-* Returns NaN in case of errors.
-* Can be run as a container.
+- Can read values of multiple nodes from multiple OPC UA servers.
+  - Supports username+password authentication.
+- Publishes values as Prometheus metrics (gauge type).
+  - Optional TLS support.
+- Returns NaN in case of errors.
+- Can be run as a container.
 
 ## Usage
 
