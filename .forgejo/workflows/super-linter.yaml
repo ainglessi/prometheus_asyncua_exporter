@@ -22,7 +22,7 @@ jobs:
       VALIDATE_SHELL_SHFMT: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
       - name: Run Super-Linter
