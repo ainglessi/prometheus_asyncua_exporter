@@ -25,12 +25,14 @@ import prometheus_client
 import socket
 import logging
 
+
 @dataclasses.dataclass
 class OPCUAGauge:
     metric_name: str
     node_path: str
     description: str
     gauge: prometheus_client.Gauge
+
 
 # Read configuration and nodes from YAML file.
 def read_yaml_config(filename: str) -> tuple:
@@ -42,6 +44,7 @@ def read_yaml_config(filename: str) -> tuple:
     tls_keyfile = config["exporter"].get("tls_keyfile")  # Optional: TLS key file path.
     return exporter_port, servers_config, tls_certfile, tls_keyfile
 
+
 # Configure logging
 def configure_logging(filename: str):
     with open(filename, "r") as yaml_file:
@@ -50,12 +53,17 @@ def configure_logging(filename: str):
     logging.basicConfig(
         level=getattr(logging, log_level, logging.INFO),
         format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
-            logging.StreamHandler(sys.stdout)
-        ]
+        handlers=[logging.StreamHandler(sys.stdout)],
     )
 
-async def query_server(url: str, username: Optional[str], password: Optional[str], nodes: List[dict], refresh_time: int):
+
+async def query_server(
+    url: str,
+    username: Optional[str],
+    password: Optional[str],
+    nodes: List[dict],
+    refresh_time: int,
+):
     while True:
         try:
             async with Client(url=url) as opcua_client:
@@ -73,18 +81,19 @@ async def query_server(url: str, username: Optional[str], password: Optional[str
                     except Exception as e:
                         logging.error(f"Error getting node value of {node['node_path']}: {e}")
                         # Set metric value to NaN when node not found or other errors occur.
-                        node["gauge"].labels(server=url).set(float('NaN'))
+                        node["gauge"].labels(server=url).set(float("NaN"))
         except socket.gaierror as e:
             logging.error(f"Error resolving hostname for OPC UA server {url}: {e}")
             # Set metric value to NaN when hostname resolution fails.
             for node in nodes:
-                node["gauge"].labels(server=url).set(float('NaN'))
+                node["gauge"].labels(server=url).set(float("NaN"))
         except Exception as e:
             logging.error(f"Connection to OPC UA server {url} failed: {e}")
             # Set metric value to NaN when connection fails.
             for node in nodes:
-                node["gauge"].labels(server=url).set(float('NaN'))
+                node["gauge"].labels(server=url).set(float("NaN"))
         await asyncio.sleep(refresh_time)
+
 
 async def main():
     config_file = sys.argv[1] if len(sys.argv) > 1 else "config.yaml"
@@ -112,6 +121,7 @@ async def main():
             node["gauge"] = gauge
         tasks.append(asyncio.create_task(query_server(url, username, password, nodes, refresh_time)))
     await asyncio.gather(*tasks)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
