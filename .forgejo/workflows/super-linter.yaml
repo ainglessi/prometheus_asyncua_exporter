@@ -1,4 +1,8 @@
-on: [push]
+on:
+  push:
+    tags-ignore: ["**"]
+  pull_request:
+
 jobs:
   super-linter:
     runs-on: docker

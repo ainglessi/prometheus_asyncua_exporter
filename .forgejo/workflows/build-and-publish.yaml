@@ -8,6 +8,7 @@ on:
         description: "Reason for manual build"
         required: false
         default: "Manual testing"
+        type: string
 jobs:
   build-and-publish:
     runs-on: docker
