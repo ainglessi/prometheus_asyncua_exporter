@@ -59,8 +59,9 @@ jobs:
         env:
           TAGS: ${{ steps.docker_meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
+          IMAGE: ${{ steps.build-and-push.outputs.imageid }}
         run: |
           echo "${{ secrets.COSIGN_KEY_B64 }}" | base64 -d > cosign.key
           export COSIGN_PASSWORD="${{ secrets.COSIGN_PASSWORD }}"
-          echo "DEBUG: images is ${{ steps.docker_meta.outputs.images }}, digest is $DIGEST" >&2
-          cosign sign --yes --key cosign.key codeberg.org/${{ env.FORGEJO_REPOSITORY }}@${DIGEST}
+          echo "DEBUG: IMAGE is ${IMAGE}, digest is ${DIGEST}" >&2
+          cosign sign --yes --key cosign.key ${IMAGE}@${DIGEST}
