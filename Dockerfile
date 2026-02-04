@@ -19,8 +19,5 @@ RUN /app/venv/bin/pip install --no-cache-dir -r requirements.txt
 # Copy application files to the container.
 COPY . .
 
-# Enable logging output.
-ENV PYTHONUNBUFFERED=1
-
 # Command to run the application.
 CMD ["venv/bin/python", "exporter.py", "config.yaml"]
