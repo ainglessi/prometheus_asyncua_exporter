@@ -62,4 +62,4 @@ jobs:
         run: |
           echo "${{ secrets.COSIGN_KEY_B64 }}" | base64 -d > cosign.key
           export COSIGN_PASSWORD="${{ secrets.COSIGN_PASSWORD }}"
-          cosign sign --yes --key cosign.key ${DIGEST}
+          cosign sign --yes --key cosign.key ${{ steps.docker_meta.outputs.tags }}@${DIGEST}
