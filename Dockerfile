@@ -1,7 +1,10 @@
 # Use official Python image from Docker Hub.
 FROM python:3.13-slim
 
-# Set missing labels.
+# Set labels.
+LABEL org.opencontainers.image.title="prometheus_asyncua_exporter"
+LABEL org.opencontainers.image.description="OPC UA exporter for Prometheus"
+LABEL org.opencontainers.image.source="https://codeberg.org/ainglessi/prometheus_asyncua_exporter"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 
 # Set working directory in the container.
