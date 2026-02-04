@@ -9,7 +9,7 @@ jobs:
   super-linter:
     runs-on: docker
     container:
-      image: ghcr.io/super-linter/super-linter/slim:latest
+      image: ghcr.io/super-linter/super-linter:slim-latest
     env:
       RUN_LOCAL: true
       DEFAULT_BRANCH: origin/main
