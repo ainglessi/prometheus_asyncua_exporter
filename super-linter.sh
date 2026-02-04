@@ -24,4 +24,4 @@ docker run \
 	-e FIX_MARKDOWN=true \
 	-e FIX_YAML_PRETTIER=true \
 	-e FIX_SHELL_SHFMT=true \
-	-v "$REPO_DIR:/tmp/lint" -it --rm ghcr.io/super-linter/super-linter:latest
+	-v "$REPO_DIR:/tmp/lint" -it --rm ghcr.io/super-linter/super-linter:slim-latest
