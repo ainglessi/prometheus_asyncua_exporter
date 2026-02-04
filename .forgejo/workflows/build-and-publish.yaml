@@ -50,7 +50,7 @@ jobs:
           build-args: |
             VERSION=${{ steps.docker_meta.outputs.version }}
           push: true
-      - name: Install Bash
+      - name: Install Bash and cURL
         run: apk add --no-cache bash curl
       - name: Install Cosign
         uses: sigstore/cosign-installer@v4.0.0
@@ -62,6 +62,4 @@ jobs:
         run: |
           echo "${{ secrets.COSIGN_KEY_B64 }}" | base64 -d > cosign.key
           export COSIGN_PASSWORD="${{ secrets.COSIGN_PASSWORD }}"
-          for tag in ${TAGS//,/ }; do
-            cosign sign --yes --key cosign.key ${tag}
-          done
+          cosign sign --yes --key cosign.key ${DIGEST}
