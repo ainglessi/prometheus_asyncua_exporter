@@ -4,7 +4,7 @@
 REPO_DIR=$(pwd)
 echo "$REPO_DIR"
 
-docker pull ghcr.io/super-linter/super-linter:latest
+docker pull ghcr.io/super-linter/super-linter:slim-latest
 
 # Run the Docker container with the specified environment variables and volume mount
 docker run \
