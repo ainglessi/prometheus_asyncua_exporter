@@ -15,6 +15,9 @@ jobs:
     runs-on: docker
     container:
       image: docker:cli
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Install Node
         run: apk add --no-cache nodejs
