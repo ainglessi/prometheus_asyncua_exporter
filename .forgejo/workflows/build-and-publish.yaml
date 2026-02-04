@@ -33,6 +33,8 @@ jobs:
         id: docker_meta
         with:
           images: "codeberg.org/${{ env.FORGEJO_REPOSITORY }}"
+          labels: |
+            org.opencontainers.image.licenses=Apache-2.0
           flavor: |
             latest=true
           tags: |
