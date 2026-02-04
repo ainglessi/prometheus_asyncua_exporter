@@ -15,9 +15,6 @@ jobs:
     runs-on: docker
     container:
       image: docker:cli
-    permissions:
-      id-token: write
-      contents: read
     steps:
       - name: Install Node
         run: apk add --no-cache nodejs
@@ -57,7 +54,7 @@ jobs:
         run: apk add --no-cache bash curl
       - name: Install Cosign
         uses: sigstore/cosign-installer@v4.0.0
-      - name: Sign the published image
+      - name: Sign image
         if: ${{ github.event_name != 'pull_request' }}
         env:
           TAGS: ${{ steps.docker_meta.outputs.tags }}
@@ -67,4 +64,5 @@ jobs:
           for tag in ${TAGS//,/ }; do
             images+="${tag}@${DIGEST} "
           done
-          cosign sign --yes ${images}
+          printf "%s" "$COSIGN_KEY" > cosign.key
+          cosign sign --yes --key cosign.key ${images}
