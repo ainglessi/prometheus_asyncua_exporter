@@ -65,5 +65,6 @@ jobs:
             images+="${tag}@${DIGEST} "
           done
           printf "%s" "$COSIGN_KEY" > cosign.key
+          head -n3 cosign.key
           export COSIGN_PASSWORD="$COSIGN_PASSWORD"
           cosign sign --yes --key cosign.key ${images}
