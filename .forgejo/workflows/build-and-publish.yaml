@@ -64,6 +64,6 @@ jobs:
           for tag in ${TAGS//,/ }; do
             images+="${tag}@${DIGEST} "
           done
-          echo "${{ secrets.$COSIGN_KEY_B64 }}" | base64 -d > cosign.key
+          echo "${{ secrets.COSIGN_KEY_B64 }}" | base64 -d > cosign.key
           export COSIGN_PASSWORD="${{ secrets.COSIGN_PASSWORD }}"
           cosign sign --yes --key cosign.key ${images}
