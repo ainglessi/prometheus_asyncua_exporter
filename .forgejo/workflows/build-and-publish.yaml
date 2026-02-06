@@ -14,10 +14,10 @@ jobs:
   build-and-publish:
     runs-on: docker
     container:
-      image: docker:cli
+      image: docker.io/library/alpine:latest
     steps:
-      - name: Install Node
-        run: apk add --no-cache nodejs
+      - name: Install Node.js, Docker and Git
+        run: apk add --no-cache nodejs docker-cli git
       - name: Checkout code
         uses: actions/checkout@v6.0.2
       - name: Setup buildx
