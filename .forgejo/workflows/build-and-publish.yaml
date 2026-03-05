@@ -29,7 +29,7 @@ jobs:
           username: ${{ env.FORGEJO_ACTOR }}
           password: ${{ secrets.registry_token }}
       - name: Get metadata
-        uses: docker/metadata-action@v5.10.0
+        uses: docker/metadata-action@v6.0.0
         id: docker_meta
         with:
           images: "codeberg.org/${{ env.FORGEJO_REPOSITORY }}"
