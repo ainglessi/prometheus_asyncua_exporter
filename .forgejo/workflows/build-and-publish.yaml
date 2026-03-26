@@ -55,7 +55,7 @@ jobs:
       - name: Install Bash and cURL
         run: apk add --no-cache bash curl
       - name: Install Cosign
-        uses: sigstore/cosign-installer@v4.0.0
+        uses: sigstore/cosign-installer@v4.1.1
       - name: Sign image
         env:
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
