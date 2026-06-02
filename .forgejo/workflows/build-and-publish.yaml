@@ -19,7 +19,7 @@ jobs:
       - name: Install Node.js, Docker and Git
         run: apk add --no-cache nodejs docker-cli git
       - name: Checkout code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
       - name: Setup buildx
         uses: docker/setup-buildx-action@v3.12.0
       - name: Login to registry
