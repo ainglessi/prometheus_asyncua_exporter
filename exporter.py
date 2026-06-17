@@ -35,21 +35,15 @@ class OPCUAGauge:
     gauge: prometheus_client.Gauge
 
 
-# Read configuration and nodes from YAML file.
-def read_yaml_config(filename: str) -> tuple:
+# Read and parse configuration from YAML file.
+def read_yaml_config(filename: str) -> dict:
     with open(filename, "r") as yaml_file:
         config = yaml.safe_load(yaml_file)
-    exporter_port = config["exporter"].get("port", 9840)  # Read exporter port, default to 9840.
-    servers_config = config["servers"]  # Read OPC UA servers and their nodes to be monitored.
-    tls_certfile = config["exporter"].get("tls_certfile")  # Optional: TLS certificate file path.
-    tls_keyfile = config["exporter"].get("tls_keyfile")  # Optional: TLS key file path.
-    return exporter_port, servers_config, tls_certfile, tls_keyfile
+    return config
 
 
-# Configure logging
-def configure_logging(filename: str):
-    with open(filename, "r") as yaml_file:
-        config = yaml.safe_load(yaml_file)
+# Configure logging from config dict.
+def configure_logging(config: dict):
     log_level = config["exporter"].get("log_level", "INFO").upper()
     logging.basicConfig(
         level=getattr(logging, log_level, logging.INFO),
@@ -98,8 +92,12 @@ async def query_server(
 
 async def main():
     config_file = sys.argv[1] if len(sys.argv) > 1 else "config.yaml"
-    exporter_port, servers_config, tls_certfile, tls_keyfile = read_yaml_config(config_file)
-    configure_logging(config_file)
+    config = read_yaml_config(config_file)
+    configure_logging(config)
+    exporter_port = config["exporter"].get("port", 9840)
+    servers_config = config["servers"]
+    tls_certfile = config["exporter"].get("tls_certfile")
+    tls_keyfile = config["exporter"].get("tls_keyfile")
     # Start the Prometheus exporter with HTTP or HTTPS.
     if tls_certfile and tls_keyfile:
         logging.info(f"Starting HTTPS server on port {exporter_port}")
