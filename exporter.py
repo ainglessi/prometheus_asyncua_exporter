@@ -61,7 +61,7 @@ async def query_server(
 ):
     while True:
         try:
-            async with Client(url=url) as opcua_client:
+            async with Client(url=url, timeout=10.0) as opcua_client:
                 # Set the username and password for authentication if provided.
                 if username and password:
                     opcua_client.set_user(username)
