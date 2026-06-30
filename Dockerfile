@@ -1,5 +1,5 @@
 # Use official Python image from Docker Hub.
-FROM python:3.13-slim
+FROM python:3.14-slim
 
 # Set labels.
 LABEL org.opencontainers.image.title="prometheus_asyncua_exporter"
