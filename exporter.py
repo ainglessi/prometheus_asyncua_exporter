@@ -61,11 +61,12 @@ async def query_server(
 ):
     while True:
         try:
-            async with Client(url=url, timeout=10.0) as opcua_client:
-                # Set the username and password for authentication if provided.
-                if username and password:
-                    opcua_client.set_user(username)
-                    opcua_client.set_password(password)
+            opcua_client = Client(url=url, timeout=10.0)
+            # Set the username and password for authentication if provided.
+            if username and password:
+                opcua_client.set_user(username)
+                opcua_client.set_password(password)
+            async with opcua_client:
                 for node in nodes:
                     try:
                         var = opcua_client.get_node(node["node_path"])
