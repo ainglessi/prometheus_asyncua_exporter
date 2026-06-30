@@ -78,9 +78,7 @@ async def _run_one_cycle(url: str, user: str, password: str) -> float:
     )
     nodes = [{"node_path": NODE_PATH, "gauge": gauge}]
     # Large refresh_time so only the first iteration runs before we cancel.
-    task = asyncio.create_task(
-        query_server(url, user, password, nodes, refresh_time=3600)
-    )
+    task = asyncio.create_task(query_server(url, user, password, nodes, refresh_time=3600))
     try:
         value = await _wait_until_set(gauge, url)
     finally:

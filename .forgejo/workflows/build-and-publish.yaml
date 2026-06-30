@@ -1,3 +1,4 @@
+name: Build and publish container image
 on:
   push:
     tags:
@@ -9,7 +10,6 @@ on:
         required: false
         default: "Manual testing"
         type: string
-
 jobs:
   build-and-publish:
     runs-on: docker

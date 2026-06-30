@@ -1,10 +1,10 @@
+name: Run Super-Linter
 on:
   push:
     branches: [main]
     tags-ignore: ["**"]
   pull_request:
     branches: [main]
-
 jobs:
   super-linter:
     runs-on: docker
