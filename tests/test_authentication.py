@@ -28,6 +28,7 @@ NaN. With the bug, wrong credentials are ignored, an anonymous session is
 opened instead, the node is read anonymously, and the metric gets a real value
 -- so the ``isnan`` assertion would fail and surface the regression.
 """
+
 import asyncio
 import contextlib
 import math

@@ -75,7 +75,9 @@ async def query_server(
                         # Set the value to Prometheus gauge with label "server" set to server URL.
                         node["gauge"].labels(server=url).set(value)
                     except Exception as e:
-                        logging.error(f"Error getting node value of {node['node_path']}: {e}")
+                        logging.error(
+                            f"Error getting node value of {node['node_path']}: {e}"
+                        )
                         # Set metric value to NaN when node not found or other errors occur.
                         node["gauge"].labels(server=url).set(float("NaN"))
         except socket.gaierror as e:
@@ -102,7 +104,9 @@ async def main():
     # Start the Prometheus exporter with HTTP or HTTPS.
     if tls_certfile and tls_keyfile:
         logging.info(f"Starting HTTPS server on port {exporter_port}")
-        prometheus_client.start_http_server(exporter_port, certfile=tls_certfile, keyfile=tls_keyfile)
+        prometheus_client.start_http_server(
+            exporter_port, certfile=tls_certfile, keyfile=tls_keyfile
+        )
     else:
         logging.info(f"Starting HTTP server on port {exporter_port}")
         prometheus_client.start_http_server(exporter_port)
@@ -117,9 +121,15 @@ async def main():
         for node in nodes:
             metric_name = node["metric_name"]
             description = node.get("description", "")
-            gauge = prometheus_client.Gauge(metric_name, description, labelnames=["server"])
+            gauge = prometheus_client.Gauge(
+                metric_name, description, labelnames=["server"]
+            )
             node["gauge"] = gauge
-        tasks.append(asyncio.create_task(query_server(url, username, password, nodes, refresh_time)))
+        tasks.append(
+            asyncio.create_task(
+                query_server(url, username, password, nodes, refresh_time)
+            )
+        )
     await asyncio.gather(*tasks)
 
 
