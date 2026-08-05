@@ -41,7 +41,7 @@ Edit `config.yaml` and start the container:
 
 Or pull the pre-built image:
 
-`docker run -v ./config.yaml:/app/config.yaml -p 9101:9840 codeberg.org/ainglessi/prometheus_asyncua_exporter`
+`docker run -v ./config.yaml:/app/config.yaml -p 9101:9840 ghcr.io/ainglessi/prometheus_asyncua_exporter`
 
 Prometheus metrics will then be available at <http://localhost:9101/>.
 

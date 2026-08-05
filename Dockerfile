@@ -4,7 +4,7 @@ FROM python:3.14-slim
 # Set labels.
 LABEL org.opencontainers.image.title="prometheus_asyncua_exporter"
 LABEL org.opencontainers.image.description="OPC UA exporter for Prometheus"
-LABEL org.opencontainers.image.source="https://codeberg.org/ainglessi/prometheus_asyncua_exporter"
+LABEL org.opencontainers.image.source="https://github.com/ainglessi/prometheus_asyncua_exporter"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 
 # Set working directory in the container.
