@@ -1,4 +1,4 @@
-prometheus-client>=0.25.0
-asyncua>=2.0.1
-cryptography>=49.0.0
+prometheus-client>=0.26.0
+asyncua>=2.1.0
+cryptography>=50.0.2
 pyyaml>=6.0.3
